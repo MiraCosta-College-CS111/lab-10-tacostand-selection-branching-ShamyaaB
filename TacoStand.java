@@ -71,17 +71,21 @@ public class TacoStand
 	 */
 	public static boolean orderSupplies(double budget)
 	{
+		if(budget <= totalFunds){
 		//tacos cost 75 cents each in supplies, keeping it simple
-	    int tacosEach = (int)(Math.round(budget / 0.75 / 4));
+		int tacosEach = (int)(Math.round(budget / 0.75 / 4));
 
-	    TacoStand.totalFunds -= budget;
+		TacoStand.totalFunds -= budget;
 
-	    TacoStand.numAsada += tacosEach;
-	    TacoStand.numPollo += tacosEach;
-	    TacoStand.numLengua += tacosEach;
-	    TacoStand.numUltimate += tacosEach;
-
-		return true;  //TODO: this is stubbed, replace this line with your actual code!
+		TacoStand.numAsada += tacosEach;
+		TacoStand.numPollo += tacosEach;
+		TacoStand.numLengua += tacosEach;
+		TacoStand.numUltimate += tacosEach;
+		return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	/**
@@ -93,10 +97,34 @@ public class TacoStand
 	 */
 	public static void updateTotalFunds(int tacoOption, int numTacos)
 	{
-		//TODO: this is stubbed, replace this line with your actual code!
+		double tacoPrice = 0;
+	
+	// Determine the price of the selected taco type
+    switch(tacoOption) {
+        case 1: // Carne Asada
+            tacoPrice = 2.5;
+            numAsada -= numTacos; // Update inventory
+            break;
+		case 2: // chicken
+		tacoPrice = 1.75; 
+		numPollo -= numTacos; // Update inventory
+		break;
+		case 3: // Lengua beef
+		tacoPrice = 3.00;
+		numLengua -= numTacos; // Update inventory
+		break;
+		case 4: // ultimate taco
+		tacoPrice = 18.00;
+		numUltimate -= numTacos; // Update inventory
+		break;
+		default:
+            System.out.println("Invalid taco choice, sorry!");
+            return;
 	}
-	
-	
+	// Update total funds based on the price and number of tacos ordered
+	totalFunds += tacoPrice * numTacos;
+    		System.out.println("Order completed, thank you! Total funds are updated.");
+}
 	/**
 	 * Determines if taco order can be fullfilled (number of tacos for specific kinda are available)
 	 * 
@@ -107,6 +135,25 @@ public class TacoStand
 	 */
 	public static boolean areTacosAvailable(int tacoOption, int numTacos)
 	{
-		return false; //TODO: this is stubbed, replace this line with your actual code!
+    // Check if the requested number of tacos is available
+    switch(tacoOption) {
+        case 1: // Carne Asada
+            return numAsada >= numTacos;
+        case 2: // Pollo Asado
+            return numPollo >= numTacos;
+        case 3: // Lengua
+            return numLengua >= numTacos;
+        case 4: // Ultimate Taco
+            return numUltimate >= numTacos;
+        default:
+            System.out.println("Invalid taco choice.");
+            return false;
+    	}
 	}
 }
+
+
+
+
+
+
