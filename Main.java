@@ -63,9 +63,9 @@ public class Main
 
         //INPUT SECTION
         TacoStand.printMenu();
-        option = UtilityBelt.readInt("Enter choice> ", 1, 4);
+        option = UtilityBelt.readInt("Enter choice> ", 1, 4); // prints out a message if they input a number that is invalid
        
-        numTacosOrdered = UtilityBelt.readInt("Enter number of tacos you want> ", 1, 50);
+        numTacosOrdered = UtilityBelt.readInt("Enter number of tacos you want> ", 1, 50); // prints out a message if they input a number that is invalid
        
         //CALCULATION + OUTPUT SECTION
         if(TacoStand.areTacosAvailable(option, numTacosOrdered))
