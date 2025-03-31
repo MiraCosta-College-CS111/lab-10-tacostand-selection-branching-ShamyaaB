@@ -64,17 +64,9 @@ public class Main
         //INPUT SECTION
         TacoStand.printMenu();
         option = UtilityBelt.readInt("Enter choice> ", 1, 4);
-        if (option < 1 || option > 4) {
-            System.out.println("ERROR: please enter value between 1 - 4");
-            option = UtilityBelt.readInt("Enter choice> ", 1, 4);
-        }
-
+       
         numTacosOrdered = UtilityBelt.readInt("Enter number of tacos you want> ", 1, 50);
-        if (numTacosOrdered < 1 || numTacosOrdered > 50) {
-            System.out.println("ERROR: please enter value between 1 - 50");
-            numTacosOrdered = UtilityBelt.readInt("Enter number of tacos you want> ", 1, 50);
-        }
-
+       
         //CALCULATION + OUTPUT SECTION
         if(TacoStand.areTacosAvailable(option, numTacosOrdered))
         {
