@@ -2,7 +2,6 @@ public class TacoStand
 {
     /* CONSTANT VARIABLES */
 	public static final String BAR = "----------------------------------------";
-	public static final int ASADA_OPTION = 1, POLLO_OPTION = 2, LENGUA_OPTION = 3, ULTIMATE_OPTION = 4;
 
 	/* STATIC VARIABLES */
 	private static int numAsada = 0, numPollo = 0, numLengua = 0, numUltimate = 0;
@@ -31,8 +30,10 @@ public class TacoStand
 	}
 	
 	/**
-	 * Returns a summary (all static variables) of the CURRENT status of the taco stand
-	 */
+	* Returns a summary (all static variables) of the CURRENT status of the taco stand
+	*
+	* @return String containing current values related to taco stand, no new line at end
+	*/
 	public static String getStatus()
 	{
 		return String.format("%s%nMCC Taco Stand Status%n%s%n" +
@@ -42,15 +43,17 @@ public class TacoStand
 			"%-23s%2d tacos%n" +
 			"%-23s%2d tacos%n%s",
 			TacoStand.BAR, TacoStand.BAR, 
-			"Funds Available:", TacoStand.totalFunds, TacoStand.BAR,
-			"# of Asada Left:", TacoStand.numAsada,
+      "Funds Available:", TacoStand.totalFunds, TacoStand.BAR,
+      "# of Asada Left:", TacoStand.numAsada,
 			"# of Pollo Left:", TacoStand.numPollo,
-			"# of Lengua Left:", TacoStand.numLengua,
-			"# of Ultimate Left:", TacoStand.numUltimate, TacoStand.BAR);
+      "# of Lengua Left:", TacoStand.numLengua,
+      "# of Ultimate Left:",TacoStand.numUltimate, TacoStand.BAR);
 	}
 
 	/**
 	 * Increases totalFunds static variable
+	 * 
+	 * @param funds assumes >0 value added to total funds available for cart
 	 */
 	public static void addTotalFunds(int funds)
 	{
@@ -58,85 +61,77 @@ public class TacoStand
 	}
 	
 	/**
-	 * Checks if budget is within total funds and orders supplies.
+	 * Checks if proposed budget to order supplies can be used to buy more supplies. If within total funds,
+	 * will update total funds and increment number of each option of tacos based on budget. Otherwise,
+	 * no variables are changed.
+	 * 
+	 * @param budget funds to use to order supplies
+	 * 
+	 * @return boolean representing if supplies could be ordered (within total funds)
 	 */
 	public static boolean orderSupplies(double budget)
 	{
-		if(budget <= TacoStand.totalFunds) 
-		{
-			int tacosEach = (int)(Math.round(budget / 0.75 / 4)); // tacos cost 75 cents each in supplies
+		//tacos cost 75 cents each in supplies, keeping it simple
+	    int tacosEach = (int)(Math.round(budget / 0.75 / 4));
 
-			TacoStand.totalFunds -= budget;
-	
-			TacoStand.numAsada += tacosEach;
-			TacoStand.numPollo += tacosEach;
-			TacoStand.numLengua += tacosEach;
-			TacoStand.numUltimate += tacosEach;
+	    TacoStand.totalFunds -= budget;
 
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
+	    TacoStand.numAsada += tacosEach;
+	    TacoStand.numPollo += tacosEach;
+	    TacoStand.numLengua += tacosEach;
+	    TacoStand.numUltimate += tacosEach;
+
+		return true; 
 	}
 
 	/**
-	 * Checks if the requested number of tacos is available.
-	 */
-	public static boolean areTacosAvailable(int tacoOption, int numTacos)
-	{
-		switch (tacoOption) 
-		{
-			case ASADA_OPTION:
-				return numAsada >= numTacos;
-			case POLLO_OPTION:
-				return numPollo >= numTacos;
-			case LENGUA_OPTION:
-				return numLengua >= numTacos;
-			case ULTIMATE_OPTION:
-				return numUltimate >= numTacos;
-			default:
-				return false;
-		}
-	}
-
-	/**
-	 * Updates totalFunds based on kind and number of tacos.
+	 * Adds funds to total (static variable) based on kind of taco (different prices) and number of tacos
+	 * in order. Will also update appropriate number of tacos left (static variables).
+	 * 
+	 * @param tacoOption menu option (kind of taco)
+	 * @param numTacos number of tacos as part of order, assume > 0
 	 */
 	public static void updateTotalFunds(int tacoOption, int numTacos)
 	{
-		if (!areTacosAvailable(tacoOption, numTacos))
-		{
-			System.out.println("ERROR: Not enough tacos available.");
-			return; // prevents negative taco count
-		}
+		double tacoPrice = 0.0;
 
-		double cost;
+        // Determine price based on taco type
+        switch(tacoOption) {
+            case 1: tacoPrice = 2.5; break;
+            case 2: tacoPrice = 1.75; break;
+            case 3: tacoPrice = 3.0; break;
+            case 4: tacoPrice = 18.0; break;
+        }
 
-		switch(tacoOption)
-		{
-			case TacoStand.ASADA_OPTION:
-				cost = 2.5;
-				TacoStand.numAsada -= numTacos;
-				break;
-			case TacoStand.POLLO_OPTION:
-				cost = 1.75;
-				TacoStand.numPollo -= numTacos;
-				break;
-			case TacoStand.LENGUA_OPTION:
-				cost = 3.0;
-				TacoStand.numLengua -= numTacos;
-				break;
-			case TacoStand.ULTIMATE_OPTION:
-				cost = 18.0;
-				TacoStand.numUltimate -= numTacos;
-				break;
-			default:
-				cost = 0;
-				break;
-		}
+        // Update funds
+        totalFunds += tacoPrice * numTacos;
 
-		TacoStand.totalFunds += cost * numTacos;
+        // Update taco stock
+        switch(tacoOption) {
+            case 1: numAsada -= numTacos; break;
+            case 2: numPollo -= numTacos; break;
+            case 3: numLengua -= numTacos; break;
+            case 4: numUltimate -= numTacos; break;
+        }
+    }
+	
+	
+	/**
+	 * Determines if taco order can be fullfilled (number of tacos for specific kinda are available)
+	 * 
+	 * @param tacoOption menu option (kind of taco)
+	 * @param numTacos number of tacos as part of order
+	 * 
+	 * @return boolean representing if specific kind of tacos, for the number in order, are available
+	 */
+	public static boolean areTacosAvailable(int tacoOption, int numTacos)
+	{
+        switch(tacoOption) {
+            case 1: return numAsada >= numTacos;
+            case 2: return numPollo >= numTacos;
+            case 3: return numLengua >= numTacos;
+            case 4: return numUltimate >= numTacos;
+            default: return false;
+        }	
 	}
 }

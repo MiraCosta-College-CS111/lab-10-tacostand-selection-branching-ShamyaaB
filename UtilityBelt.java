@@ -42,38 +42,42 @@ public class UtilityBelt
 	*
 	* @return returns integer value between lower and upper (inclusive)
 	**/
-	public static int readInt(String prompt, int lower, int upper) {
+	public static int readInt(String prompt, int lower, int upper)
+	{
 		String temp;
-		int result = 0;
+		int result;
 		boolean isNotValid;
-	
-		do {
+		
+		isNotValid = true; // initialize all variables, Compiler will complain because they are initialized in try/catch
+		result = 0;
+		
+		do
+		{
 			System.out.print(prompt);
-	
-			// Ensure input is available before reading
-			if (!keyboard.hasNextLine()) {
-				System.out.println("ERROR: No input available.");
-				return lower; // Return a safe default value
-			}
-	
 			temp = keyboard.nextLine();
-	
-			try {
+			
+			try
+			{
 				result = Integer.parseInt(temp);
 				isNotValid = (result < lower) || (result > upper);
-	
-				if (isNotValid) {
-					System.out.println("ERROR: Please enter a value between " + lower + " - " + upper);
+				
+				if(isNotValid)
+				{
+					System.out.println("ERROR: please enter value between " + lower + " - " + upper);
 				}
-			} catch (NumberFormatException nfe) {
-				System.out.println("ERROR: Integer input is required.");
-				isNotValid = true; // Force loop to repeat
 			}
-	
-		} while (isNotValid);
-	
+			catch(NumberFormatException nfe)
+			{
+				System.out.println("Error: integer input is required");
+			}
+			
+		} while(isNotValid);
+
+
 		return result;
 	}
+	
+	
 	/**
 	* Reads input from user until valid double value entered (error-checked using bounds)
 	*
